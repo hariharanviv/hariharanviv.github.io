@@ -21,7 +21,12 @@ Folder structure
 ├── publications.md         # Publications page
 ├── tidbit.md               # Sidebar tidbit
 ├── /assets/
-│   └── avatar.jpg          # Profile photo
+│   ├── avatar.jpg          # Profile photo
+│   ├── icon-email.svg      # Email icon
+│   ├── icon-x.svg          # X icon
+│   ├── icon-scholar.svg    # Google Scholar icon
+│   ├── icon-orcid.svg      # ORCID icon
+│   └── icon-github.svg     # GitHub icon
 ├── /blog/
 │   ├── index.md            # Blog hub
 │   ├── post-1.md           # Example post
@@ -33,11 +38,6 @@ Folder structure
     ├── paper1.pdf          # Add papers here
     └── paper2.pdf          # ...
 ```
-
-Core files
-- [index.html](index.html) — main site shell and navigation
-- [styles.css](styles.css) — visual styles (Roboto font, light/dark mode variables)
-- [app.js](app.js) — client-side Markdown loader and renderer
 
 Core files
 - [index.html](index.html) — main site shell and navigation
@@ -118,14 +118,16 @@ The site will detect `[...] (path/to/post.md)` and make the card's title open th
 - Add research papers or PDFs to `/papers/` for reference
 
 **Social links (sidebar):**
-- Edit the links in `index.html` in the sidebar `section.social-section`.
-- Replace the placeholders with your handles:
+- Edit the social link URLs in `index.html` in the sidebar `section.social-section`.
+- Replace the placeholder URLs with your own handles:
   - Email: `mailto:you@example.com`
   - X: `https://x.com/YOUR_USERNAME`
   - Google Scholar: `https://scholar.google.com/citations?user=YOUR_ID`
   - ORCID: `https://orcid.org/YOUR_ORCID`
   - GitHub: `https://github.com/YOUR_USERNAME`
-- The icons are simple emoji placeholders styled by CSS; replace the content of each anchor with an `img` tag pointing to a specific SVG in `/assets/` if you prefer custom icons.
+- Icons are SVG files in `/assets/` (email, X, scholar, ORCID, GitHub).
+- In light mode, icons are black; in dark mode, they are automatically inverted for contrast.
+- To use custom icons, replace the `src` paths in `index.html` or create new SVG files in `/assets/`.
 
 **Add new nav items:**
 Add a button to the navigation in `index.html`:
