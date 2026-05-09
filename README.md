@@ -117,6 +117,16 @@ The site will detect `[...] (path/to/post.md)` and make the card's title open th
 - Edit [cvs/cv.md](cvs/cv.md) and drop a `cv.pdf` in `/cvs/` for the CV page
 - Add research papers or PDFs to `/papers/` for reference
 
+**Social links (sidebar):**
+- Edit the links in `index.html` in the sidebar `section.social-section`.
+- Replace the placeholders with your handles:
+  - Email: `mailto:you@example.com`
+  - X: `https://x.com/YOUR_USERNAME`
+  - Google Scholar: `https://scholar.google.com/citations?user=YOUR_ID`
+  - ORCID: `https://orcid.org/YOUR_ORCID`
+  - GitHub: `https://github.com/YOUR_USERNAME`
+- The icons are simple emoji placeholders styled by CSS; replace the content of each anchor with an `img` tag pointing to a specific SVG in `/assets/` if you prefer custom icons.
+
 **Add new nav items:**
 Add a button to the navigation in `index.html`:
 
