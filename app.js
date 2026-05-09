@@ -10,7 +10,7 @@
     if(el) el.innerHTML = html;
   }
 
-  async function loadMarkdown(path){
+  async function loadMarkdown(path, pushHistory=true){
     try{
       // Provide helpful guidance when the page is opened via file://
       if(location.protocol === 'file:'){
@@ -23,6 +23,11 @@
       const md = await res.text();
       $('#content').innerHTML = renderMarkdown(md);
       $('#content').focus();
+
+      // update browser history (use hash to avoid server reloads)
+      if(pushHistory){
+        try{ history.pushState({md: path}, '', '#'+path); }catch(e){ /* ignore */ }
+      }
     } catch(e){
       showLoaderMessage(`<h2>Unable to load ${path}</h2><p>${escapeHtml(e.message)}</p><p>If you're running from the file system, start a static server (see README).</p>`);
       console.error('loadMarkdown error:', e);
@@ -224,10 +229,18 @@
       });
     }
 
-    // load default page (about.md if present)
-    loadMarkdown('about.md');
+    // load default page (respect hash if present)
+    const initial = (location.hash && location.hash.length>1) ? location.hash.slice(1) : 'about.md';
+    loadMarkdown(initial, false);
     // load sidebar tidbit if available
     loadTidbit('tidbit.md');
+  });
+
+  // handle back/forward navigation
+  window.addEventListener('popstate', (ev)=>{
+    const md = (ev.state && ev.state.md) || ((location.hash && location.hash.length>1) ? location.hash.slice(1) : null);
+    if(md){ loadMarkdown(md, false); }
+    else { loadMarkdown('about.md', false); }
   });
 
   function initTheme(){
