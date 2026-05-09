@@ -73,9 +73,9 @@ main.container{display:grid;grid-template-columns:280px 1fr;gap:2rem;padding-top
 .tidbit-title{display:block;color:var(--accent);font-weight:600;margin-bottom:0.25rem}
 .tidbit-text{color:var(--muted);margin:0}
 .content h1,.content h2,.content h3{color:var(--text);font-family:Roboto, system-ui, sans-serif;margin-top:1rem}
-.content h1{font-size:4rem}
-.content h2{font-size:3rem}
-.content h3{font-size:2.2rem}
+.content h1{font-size:4.4rem}
+.content h2{font-size:3.2rem}
+.content h3{font-size:2.4rem}
 .content p{color:var(--muted);line-height:1.6}
 .content a{color:var(--accent)}
 .content pre{background:var(--card);padding:0.9rem;border-radius:8px;overflow:auto;border:1px solid var(--glass-2)}
@@ -86,7 +86,7 @@ ul{padding-left:1.1rem}
 .col-md-12{flex:0 0 100%;padding-right:15px;padding-left:15px;max-width:100%}
 
 .ux-design{
-  background-color:#ffffff;
+  background:var(--card);
   border-radius:9px;
   box-shadow:0px 10px 45px 5px rgba(0,0,0,0.08);
   margin-bottom:30px;
@@ -100,6 +100,7 @@ ul{padding-left:1.1rem}
 .design-info{
   padding:0;
   width:100%;
+  color:var(--text);
 }
 .design-title{
   margin-bottom:25px;
@@ -108,13 +109,13 @@ ul{padding-left:1.1rem}
   text-align:center;
   width:95px;
   height:31px;
-  background-color:#f33d4d;
+  background:var(--accent);
   transition:all 0.3s ease-in-out;
   margin:0;
   padding:0;
   line-height:31px;
   font-size:13px;
-  color:#ffffff;
+  color:var(--accent-foreground, #ffffff);
   font-weight:600;
 }
 .design-title h5 a{
@@ -128,8 +129,8 @@ ul{padding-left:1.1rem}
 }
 .design-info > a{
   position:relative;
-  font-size:24px;
-  color:#1c232b;
+  font-size:26px;
+  color:var(--text);
   background-image:linear-gradient(#1c232b,#1c232b);
   background-position:0 100%;
   background-repeat:no-repeat;
@@ -146,11 +147,17 @@ ul{padding-left:1.1rem}
   background-size:100% 2px;
 }
 .design-info a p{
-  color:#798795;
+  color:var(--muted);
   font-size:16px;
   font-weight:normal;
   line-height:1.875;
   margin:10px 0 0 0;
+}
+
+/* ensure badge contrast in dark mode if needed */
+body.dark-mode .design-title h5{
+  background:var(--accent);
+  color:var(--accent-foreground, #ffffff);
 }
 .design-info span{
   display:block;
