@@ -111,7 +111,15 @@
         // Populate current blog card
         if(currentCard){
           if(!currentCard.title && raw.trim()){
-            currentCard.title = raw.trim();
+            const titleLine = raw.trim();
+            const linkMatch = titleLine.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+            if(linkMatch){
+              currentCard.title = linkMatch[1].trim();
+              currentCard.link = linkMatch[2].trim();
+            } else {
+              currentCard.title = titleLine;
+              currentCard.link = null;
+            }
           } else if(currentCard.title && raw.trim()){
             if(currentCard.excerpt) currentCard.excerpt += ' ';
             currentCard.excerpt += raw.trim();
@@ -123,6 +131,7 @@
       
       // Render all blog cards (Jean Fan style)
       blogCards.forEach(card => {
+        const href = card.link ? card.link : '#';
         out += `<div class="row">
         <div class="col-md-12">
           <div class="ux-design wow fadeInUp">
@@ -131,10 +140,10 @@
                 <h5>${escapeHtml(card.category)}</h5>
               </div>
               <span class="pb-10">${escapeHtml(card.date)}</span>
-              <a href="#">
+              <a href="${href}">
                 ${escapeHtml(card.title)}
                 <p class="pt-20 pb-10">
-                  ${inlineMarkdown(escapeHtml(card.excerpt.substring(0, 350)))}
+                  ${inlineMarkdown(escapeHtml((card.excerpt||'').substring(0, 350)))}
                   <i>(continue reading)</i>
                 </p>
               </a>

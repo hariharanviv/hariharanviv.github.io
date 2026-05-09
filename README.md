@@ -97,6 +97,20 @@ A short intro to the post. This excerpt will appear in the blog hub...
 
 The blog hub automatically extracts the title and first ~300 characters as an excerpt.
 
+Advanced: link titles directly to post files
+
+If you prefer the blog hub entry's title to be a direct link to the full post file (so clicking the title opens the post in-place), write the title line as a Markdown link to the post file, e.g.:
+
+```
+### Commentary | May 9, 2026
+[Five Ways Data Can Transform Your Perspective](blog/post-5.md)
+The short intro paragraph...
+
+---
+```
+
+The site will detect `[...] (path/to/post.md)` and make the card's title open that file inside the main content area.
+
 **Add sidebar content:**
 - Edit [tidbit.md](tidbit.md) for the short personal tidbit under your name
 - Place `avatar.jpg` in `/assets/` for a profile photo
