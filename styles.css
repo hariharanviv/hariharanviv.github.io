@@ -142,7 +142,7 @@ ul{padding-left:1.1rem}
   background-position:0 100%;
   background-repeat:no-repeat;
   background-size:0% 2px;
-  font-family:"Playfair Display", "Times New Roman";
+  font-family:Roboto, system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial;
   cursor:pointer;
   transition:background-size 0.3s;
   text-decoration:none;
