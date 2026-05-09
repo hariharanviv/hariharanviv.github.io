@@ -200,6 +200,21 @@
       });
     });
 
+    // delegate clicks on markdown links inside #content to the client loader
+    const content = document.getElementById('content');
+    if(content){
+      content.addEventListener('click', (ev)=>{
+        const a = ev.target.closest && ev.target.closest('a');
+        if(!a) return;
+        const href = a.getAttribute('href') || '';
+        // handle local markdown links (relative paths ending with .md)
+        if(href.endsWith('.md')){
+          ev.preventDefault();
+          loadMarkdown(href);
+        }
+      });
+    }
+
     // load default page (about.md if present)
     loadMarkdown('about.md');
     // load sidebar tidbit if available
