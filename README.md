@@ -67,6 +67,7 @@ CV folder (`/cvs/`)
 
 Papers folder (`/papers/`)
 - `papers/paper1.pdf` — add research papers or PDFs here
+- Link these from [publications.md](publications.md) as `papers/<filename>.pdf`
 
 Assets folder (`/assets/`)
 - `assets/avatar.jpg` — optional profile photo (~200x200px)
@@ -80,6 +81,23 @@ Add or edit content
 
 **Main pages (About, Publications, CV):**
 Edit the corresponding `.md` files directly. The site reloads content when you click nav buttons.
+
+**Publications with downloadable PDFs:**
+1. Put each paper PDF in the `/papers/` folder.
+2. In [publications.md](publications.md), add one entry per paper with a relative PDF link.
+3. Use this pattern:
+
+```md
+### Paper Title
+
+Author A., Author B., and Author C. (Year).
+
+Blurb: 1-3 sentences describing the result and why it matters.
+
+PDF: [Download paper](papers/your-paper-file.pdf)
+```
+
+Any Markdown link ending in `.pdf` is rendered as a downloadable link by the site.
 
 **Blog posts:**
 1. Create a new `.md` file in the `/blog/` folder (e.g., `blog/post-2.md`) with your post content.
@@ -146,6 +164,11 @@ The site will detect `[...] (path/to/post.md)` and make the card's title open th
   - Comments section (powered by Utterances, requires GitHub repo)
 - To enable comments, update the `loadUtterances()` function in `app.js` with your GitHub repo name.
 - RSS feed auto-generated from blog posts (accessible via browser console: `generateRSSFeed()`)
+
+**Quick publication checklist:**
+1. Drop the PDF into `/papers/`.
+2. Add or update the entry in [publications.md](publications.md) with a relative `papers/<filename>.pdf` link.
+3. Refresh the site or redeploy to GitHub Pages.
 
 **Print-friendly pages:**
 - Press Ctrl+P (or Cmd+P on Mac) to print any page.

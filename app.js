@@ -90,7 +90,12 @@
     // images
     str = str.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img alt="$1" src="$2" />');
     // links
-    str = str.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+    str = str.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (m, text, href) => {
+      if(/\.pdf($|\?)/i.test(href)){
+        return `<a href="${href}" download>${text}</a>`;
+      }
+      return `<a href="${href}">${text}</a>`;
+    });
     // bold
     str = str.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
     // italics
