@@ -9,6 +9,13 @@ This folder contains a minimal, build-free static academic website using plain H
 - Jean Fan-inspired blog post cards
 - Markdown-based content (no database)
 - Works with any static server (GitHub Pages, Python, nginx, etc.)
+- **Back-to-top button** — appears when scrolling down
+- **Print-friendly CSS** — hide nav/sidebar, optimize for PDF
+- **Blog tags** — organize posts by topic
+- **Related posts** — auto-suggest similar posts at end of each post
+- **Social share buttons** — Twitter/LinkedIn links for blog posts
+- **Comments** — Utterances GitHub-backed comments (optional)
+- **RSS feed** — auto-generated from blog posts (accessible via JS)
 
 Folder structure
 ```
@@ -128,6 +135,27 @@ The site will detect `[...] (path/to/post.md)` and make the card's title open th
 - Icons are SVG files in `/assets/` (email, X, scholar, ORCID, GitHub).
 - In light mode, icons are black; in dark mode, they are automatically inverted for contrast.
 - To use custom icons, replace the `src` paths in `index.html` or create new SVG files in `/assets/`.
+
+**Blog tags & features:**
+- Add tags to blog posts by including them in the blog hub header: `### Category | Date | tag1, tag2, tag3`
+  - Tags appear as small colored badges on the blog hub.
+  - When viewing an individual post, related posts with matching tags are auto-suggested.
+- When viewing a blog post, visitors see:
+  - Social share buttons (X/LinkedIn) at the bottom
+  - Related posts from the same tags
+  - Comments section (powered by Utterances, requires GitHub repo)
+- To enable comments, update the `loadUtterances()` function in `app.js` with your GitHub repo name.
+- RSS feed auto-generated from blog posts (accessible via browser console: `generateRSSFeed()`)
+
+**Print-friendly pages:**
+- Press Ctrl+P (or Cmd+P on Mac) to print any page.
+- Navigation, sidebar, and theme toggle hidden automatically when printing.
+- Blog posts print cleanly without extra UI elements.
+
+**Back-to-top button:**
+- Appears in the bottom-right corner when scrolling down the page.
+- Click to smoothly scroll back to the top.
+- Auto-hides on short pages where scrolling isn't needed.
 
 **Add new nav items:**
 Add a button to the navigation in `index.html`:

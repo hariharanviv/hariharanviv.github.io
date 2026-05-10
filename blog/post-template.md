@@ -15,3 +15,7 @@ More details.
 ---
 
 *Optional references or links.*
+
+---
+
+**Tags:** tag1, tag2, tag3 (optional; add to blog/index.md header: `### Category | Date | tag1, tag2, tag3`)

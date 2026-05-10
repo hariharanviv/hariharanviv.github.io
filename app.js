@@ -2,6 +2,9 @@
 (function(){
   'use strict';
 
+  // Global blog store for related posts and RSS
+  let allBlogPosts = [];
+
   function $(sel,root=document){return root.querySelector(sel)}
   function $all(sel,root=document){return Array.from(root.querySelectorAll(sel))}
 
@@ -21,8 +24,42 @@
       const res = await fetch(path);
       if(!res.ok) throw new Error(`${res.status} ${res.statusText}`);
       const md = await res.text();
-      $('#content').innerHTML = renderMarkdown(md);
+      let html = renderMarkdown(md);
+      
+      // If viewing a blog post, add social share, related posts, and comments
+      if(path.startsWith('blog/post-') && path.endsWith('.md')){
+        const postUrl = window.location.href.split('#')[0] + '#' + path;
+        const postTitle = md.split('\n')[0].replace(/^#+\s*/, '');
+        html += addSocialShare(postTitle, postUrl);
+        
+        // Find related posts from blog hub
+        const blogIndexRes = await fetch('blog/index.md');
+        if(blogIndexRes.ok){
+          const blogIndexMd = await blogIndexRes.text();
+          renderMarkdown(blogIndexMd); // This populates allBlogPosts
+          const related = findRelatedPosts(extractTagsFromPost(md));
+          if(related.length){
+            html += '<div class="related-posts"><h3>Related posts</h3><ul>';
+            related.forEach(p=>{
+              if(p.link && p.link !== path){
+                html += `<li><a href="${p.link}">${escapeHtml(p.title)}</a></li>`;
+              }
+            });
+            html += '</ul></div>';
+          }
+        }
+        
+        // Add comments section (Utterances)
+        html += '<div id="comments" style="margin-top:2rem"></div>';
+      }
+      
+      $('#content').innerHTML = html;
       $('#content').focus();
+
+      // Load Utterances for comments if viewing a blog post
+      if(path.startsWith('blog/post-') && path.endsWith('.md')){
+        loadUtterances();
+      }
 
       // update browser history (use hash to avoid server reloads)
       if(pushHistory){
@@ -92,13 +129,15 @@
           foundFirstH3 = true;
           if(currentCard) blogCards.push(currentCard);
           
-          const match = raw.match(/^###\s+(.+?)\s*\|\s*(.+)$/);
+          const match = raw.match(/^###\s+(.+?)\s*\|\s*(.+?)\s*(?:\|\s*(.+))?$/);
           if(match){
             currentCard = {
               category: match[1].trim(),
               date: match[2].trim(),
+              tags: (match[3]||'').split(',').map(t=>t.trim()).filter(t=>t),
               title: '',
-              excerpt: ''
+              excerpt: '',
+              link: null
             };
           }
           continue;
@@ -134,9 +173,13 @@
       
       if(currentCard) blogCards.push(currentCard);
       
+      // Store for RSS and related posts
+      allBlogPosts = blogCards;
+      
       // Render all blog cards (Jean Fan style)
       blogCards.forEach(card => {
         const href = card.link ? card.link : '#';
+        const tagHtml = card.tags && card.tags.length ? `<div class="blog-tags">${card.tags.map(t=>`<span class="blog-tag">${escapeHtml(t)}</span>`).join('')}</div>` : '';
         out += `<div class="row">
         <div class="col-md-12">
           <div class="ux-design wow fadeInUp">
@@ -152,6 +195,7 @@
                   <i>(continue reading)</i>
                 </p>
               </a>
+              ${tagHtml}
             </div>
           </div>
         </div>
@@ -202,10 +246,99 @@
     return out;
   }
 
+  function initBackToTop(){
+    const btn = $('#back-to-top');
+    if(!btn) return;
+    window.addEventListener('scroll', ()=>{
+      if(window.scrollY > 300){
+        btn.classList.add('show');
+      } else {
+        btn.classList.remove('show');
+      }
+    });
+    btn.addEventListener('click', ()=>{
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  }
+
+  function addSocialShare(title, url){
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`;
+    const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+    return `<div class="social-share">
+      <a class="share-btn" href="${twitterUrl}" target="_blank" rel="noopener" title="Share on X">𝕏</a>
+      <a class="share-btn" href="${linkedinUrl}" target="_blank" rel="noopener" title="Share on LinkedIn">in</a>
+    </div>`;
+  }
+
+  function findRelatedPosts(currentTags, maxResults=3){
+    if(!currentTags || !currentTags.length) return [];
+    return allBlogPosts.filter(p=>{
+      if(!p.tags || !p.tags.length) return false;
+      return p.tags.some(t=>currentTags.includes(t));
+    }).slice(0, maxResults);
+  }
+
+  function generateRSSFeed(){
+    if(!allBlogPosts.length) return '';
+    const baseUrl = window.location.origin;
+    const timestamp = new Date().toISOString();
+    let items = allBlogPosts.map(p=>`
+    <item>
+      <title>${escapeXml(p.title)}</title>
+      <link>${baseUrl}/#${encodeURIComponent(p.link||'blog/index.md')}</link>
+      <pubDate>${new Date(p.date).toUTCString()}</pubDate>
+      <description>${escapeXml(p.excerpt)}</description>
+      <category>${escapeXml(p.category)}</category>
+    </item>`).join('');
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Your Name - Blog</title>
+    <link>${baseUrl}</link>
+    <description>Essays on data, science, and perspectives</description>
+    <lastBuildDate>${timestamp}</lastBuildDate>
+    ${items}
+  </channel>
+</rss>`;
+  }
+
+  function escapeXml(s){
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;');
+  }
+
+  function extractTagsFromPost(md){
+    const lines = md.split('\n');
+    for(let line of lines){
+      const match = line.match(/^###\s+.+?\s*\|\s*.+?\s*(?:\|\s*(.+))?$/);
+      if(match && match[1]){
+        return match[1].split(',').map(t=>t.trim()).filter(t=>t);
+      }
+    }
+    return [];
+  }
+
+  function loadUtterances(){
+    const script = document.createElement('script');
+    script.src = 'https://utteranc.es/client.js';
+    script.async = true;
+    script.setAttribute('repo', 'hariharanviv/hariharanviv.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('label', 'comment');
+    script.setAttribute('theme', document.body.classList.contains('dark-mode') ? 'github-dark' : 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+    const commentsDiv = $('#comments');
+    if(commentsDiv){
+      commentsDiv.appendChild(script);
+    }
+  }
+
   // attach nav handlers
   document.addEventListener('DOMContentLoaded', ()=>{
     // initialize theme
     initTheme();
+    
+    // initialize back-to-top button
+    initBackToTop();
 
     $all('.nav-link[data-md]').forEach(btn=>{
       btn.addEventListener('click', ()=>{
