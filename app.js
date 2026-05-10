@@ -4,6 +4,7 @@
 
   // Global blog store for related posts and RSS
   let allBlogPosts = [];
+  let postTagMap = {}; // Map of post file path -> tags array
 
   function $(sel,root=document){return root.querySelector(sel)}
   function $all(sel,root=document){return Array.from(root.querySelectorAll(sel))}
@@ -36,8 +37,9 @@
         const blogIndexRes = await fetch('blog/index.md');
         if(blogIndexRes.ok){
           const blogIndexMd = await blogIndexRes.text();
-          renderMarkdown(blogIndexMd); // This populates allBlogPosts
-          const related = findRelatedPosts(extractTagsFromPost(md));
+          renderMarkdown(blogIndexMd); // This populates allBlogPosts and postTagMap
+          const currentTags = postTagMap[path] || [];
+          const related = findRelatedPosts(currentTags);
           if(related.length){
             html += '<div class="related-posts"><h3>Related posts</h3><ul>';
             related.forEach(p=>{
@@ -176,6 +178,13 @@
       // Store for RSS and related posts
       allBlogPosts = blogCards;
       
+      // Build tag map for quick lookup when viewing individual posts
+      blogCards.forEach(card => {
+        if(card.link){
+          postTagMap[card.link] = card.tags;
+        }
+      });
+      
       // Render all blog cards (Jean Fan style)
       blogCards.forEach(card => {
         const href = card.link ? card.link : '#';
@@ -304,17 +313,6 @@
 
   function escapeXml(s){
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;');
-  }
-
-  function extractTagsFromPost(md){
-    const lines = md.split('\n');
-    for(let line of lines){
-      const match = line.match(/^###\s+.+?\s*\|\s*.+?\s*(?:\|\s*(.+))?$/);
-      if(match && match[1]){
-        return match[1].split(',').map(t=>t.trim()).filter(t=>t);
-      }
-    }
-    return [];
   }
 
   function loadUtterances(){
