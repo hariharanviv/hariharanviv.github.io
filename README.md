@@ -149,12 +149,37 @@ Customization
 **Theme toggle:**
 The 🌙/☀️ button in the header toggles light and dark mode. Edit `:root` and `body.dark-mode` in `styles.css` to customize colors.
 
-**Typography:**
-- Font: Roboto (sans-serif)
-- Base size: 1.05rem with 1.6 line-height
-- Headings: 4rem (h1), 3rem (h2), 2.2rem (h3)
+**Customization guide:**
 
-To change fonts or sizes, edit `styles.css`.
+*Colors & Theme:*
+- Light mode: Edit the CSS variables in `:root` (lines ~1–10 in `styles.css`)
+  - `--bg`: page background
+  - `--card`: card/box background
+  - `--text`: main text color
+  - `--muted`: secondary/dimmed text
+  - `--accent`: links, buttons, badges
+- Dark mode: Edit `body.dark-mode` variables (lines ~13–20) similarly
+
+*Typography:*
+- Main font: Roboto (set in `body` rule; change `font-family` to use a different system or web font)
+- Page headings (h1, h2, h3) in `.content` rule (lines ~73–75):
+  - `h1`: Currently 3.4rem; adjust to make "Vivek Hariharan", "Publications", etc. larger or smaller
+  - `h2`: Currently 2.5rem
+  - `h3`: Currently 1.9rem
+- Base text size: `body { font-size: 1.05rem }` (line ~26)
+
+*Header size:*
+- Site title (top-left): `.site-title { font-size: 2.4rem }` (line ~35)
+- Nav buttons: `.main-nav .nav-link { font-size: 1.05rem }` (line ~38)
+- Increase these values to make the header bolder
+
+*Layout:*
+- Sidebar width: `main.container { grid-template-columns: 280px 1fr }` (line ~61)
+  - Change `280px` to widen/narrow the sidebar
+
+*Blog cards:*
+- All colors use theme variables: `--card`, `--card-border`, `--card-shadow`, `--accent`
+- Card spacing: `.ux-design { padding: 30px; margin-bottom: 30px }` (lines ~104–105)
 
 Preview locally
 
