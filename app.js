@@ -34,22 +34,31 @@
         html += addSocialShare(postTitle, postUrl);
         
         // Find related posts from blog hub
-        const blogIndexRes = await fetch('blog/index.md');
-        if(blogIndexRes.ok){
-          const blogIndexMd = await blogIndexRes.text();
-          renderMarkdown(blogIndexMd); // This populates allBlogPosts and postTagMap
-          const currentTags = postTagMap[path] || [];
-          const related = findRelatedPosts(currentTags);
-          if(related.length){
-            html += '<div class="related-posts"><h3>Related posts</h3><ul>';
-            related.forEach(p=>{
-              if(p.link && p.link !== path){
-                html += `<li><a href="${p.link}">${escapeHtml(p.title)}</a></li>`;
-              }
-            });
-            html += '</ul></div>';
+        let currentTags = [];
+        try {
+          const blogIndexRes = await fetch('blog/index.md');
+          if(blogIndexRes.ok){
+            const blogIndexMd = await blogIndexRes.text();
+            renderMarkdown(blogIndexMd); // This populates allBlogPosts and postTagMap
+            currentTags = postTagMap[path] || [];
           }
+        } catch(e) {
+          console.error('Error loading blog index:', e);
         }
+        
+        // Always add related posts section
+        const related = findRelatedPosts(currentTags);
+        html += '<div class="related-posts"><h3>Related posts</h3>';
+        if(related.length){
+          html += '<ul>';
+          related.forEach(p=>{
+            if(p.link && p.link !== path){
+              html += `<li><a href="${p.link}">${escapeHtml(p.title)}</a></li>`;
+            }
+          });
+          html += '</ul>';
+        }
+        html += '</div>';
         
         // Add comments section (Utterances)
         html += '<div id="comments" style="margin-top:2rem"></div>';
