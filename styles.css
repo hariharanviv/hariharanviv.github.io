@@ -1,5 +1,6 @@
 :root{
   --bg:#f6f3ee;
+  --bg-accent: rgba(31,78,121,0.04);
   --card:#fffdf9;
   --muted:#415061;
   --accent:#1f4e79;
@@ -27,9 +28,11 @@ body{
   margin:0;
   font-family: Roboto, system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial;
   background:
-    radial-gradient(circle at top, rgba(31,78,121,0.05), transparent 34%),
-    linear-gradient(180deg, rgba(255,255,255,0.28), rgba(255,255,255,0));
-  background-color: var(--bg);
+    radial-gradient(circle at 8% 12%, var(--bg-accent), transparent 28%),
+    linear-gradient(120deg, rgba(31,78,121,0.03), rgba(122,166,207,0.01)),
+    var(--bg);
+  background-repeat:no-repeat;
+  background-attachment:fixed;
   color:var(--text);
   font-size:1.05rem;
   line-height:1.6;
@@ -37,7 +40,7 @@ body{
 }
 .container{max-width:var(--max-width);margin:0 auto;padding:2rem}
 .header-inner{display:flex;align-items:center;justify-content:space-between;gap:1rem}
-.site-title{font-size:2.05rem;margin:0;font-weight:500;color:var(--accent);letter-spacing:0.02em;font-family:Roboto, system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial}
+.site-title{font-size:2.15rem;margin:0;font-weight:600;color:var(--accent);letter-spacing:0.025em;font-family:Roboto, system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial;text-transform:none}
 .main-nav{display:flex;gap:0.5rem;align-items:center}
 .main-nav .nav-link{background:transparent;border:0;color:var(--muted);padding:0.6rem 0.95rem;border-radius:999px;cursor:pointer;font-size:1.12rem;font-weight:600;letter-spacing:0.01em}
 .main-nav .nav-link:hover{color:var(--accent);background:var(--glass-2)}
@@ -181,9 +184,9 @@ body.dark-mode .design-title h5{
 }
 
 .social-links{display:flex;gap:0.5rem;margin-top:0.5rem}
-.social{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:8px;background:var(--card);border:1.5px solid var(--card-border);box-shadow:var(--card-shadow);text-decoration:none;font-size:18px}
+.social{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:10px;background:var(--card);border:1.5px solid var(--card-border);box-shadow:var(--card-shadow);text-decoration:none;font-size:18px;transition:all 0.18s ease}
 .social img{width:22px;height:22px;stroke:var(--text);fill:var(--text)}
-.social:hover{transform:translateY(-2px)}
+.social:hover{transform:translateY(-4px);box-shadow:0 10px 30px rgba(17,24,39,0.08);background:linear-gradient(135deg,var(--accent),#7aa6cf);color:#fff}
 body.dark-mode .social img{filter:invert(1)}
 .mb-25{
   margin-bottom:25px;
