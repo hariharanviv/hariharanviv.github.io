@@ -67,16 +67,22 @@
       $('#content').innerHTML = html;
       $('#content').focus();
 
-      // If the page is a Talks page, load the talks renderer
+      // If the page is a Talks page, inject talkmap container and load talks renderer
       if(path && path.startsWith('talks/')){
         try{
+          // Inject the talkmap div at the top of content
+          const mapDiv = document.createElement('div');
+          mapDiv.id = 'talkmap';
+          mapDiv.style.cssText = 'width:100%;height:480px;border-radius:12px;margin-top:1rem;margin-bottom:2rem';
+          $('#content').insertBefore(mapDiv, $('#content').firstChild);
+          
           // load talks.js if available
           if(!window.initTalks){
             const s = document.createElement('script');
             s.src = 'talks/talks.js';
-            s.onload = ()=>{ if(window.initTalks) window.initTalks(); };
+            s.onload = ()=>{ if(window.initTalks) setTimeout(()=>window.initTalks(), 100); };
             document.body.appendChild(s);
-          } else { window.initTalks(); }
+          } else { setTimeout(()=>{ if(window.initTalks) window.initTalks(); }, 100); }
         } catch(e){ console.error('Error initializing talks:', e); }
       }
       // Load Utterances for comments if viewing a blog post

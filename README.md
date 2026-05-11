@@ -197,13 +197,46 @@ Add a button to the navigation in `index.html`:
 <button data-md="path/to/file.md" class="nav-link">Label</button>
 ```
 
-Talks (how it works)
+Talks (how to add talks)
 ---------------------
-- Put talk metadata in `talks/talks.json`. Each entry should have: `title`, `venue`, `location`, `date`, `lat`, `lng`, and optional `slides` (relative path to slides PDF).
-- The `talks/index.md` page contains a `#talkmap` div that the client-side `talks/talks.js` will populate with an interactive Leaflet map and a list of talks below it.
-- `talks/talks.js` loads Leaflet from a CDN, fetches `talks/talks.json`, places markers, and binds popups with slides links where available.
 
-This approach mirrors the academicpages `talkmap.ipynb` idea by keeping talk metadata in a simple JSON file and rendering an interactive map client-side so you don't need a Jupyter server in production.
+**How it works:**
+- Talk metadata lives in `talks/talks.json` as a JSON array of talk objects.
+- When you click the Talks nav button, `app.js` injects a `#talkmap` div, loads `talks/talks.js`, and initializes an interactive Leaflet map showing all talks by location.
+- Below the map is a list of all talks with venue, date, and optional slides links.
+- This approach mirrors academicpages' `talkmap.ipynb` idea but uses client-side JavaScript so no server is needed.
+
+**Add or edit talks:**
+
+1. Edit `talks/talks.json` and add or modify entries. Each entry must have:
+   - `title` — talk title
+   - `venue` — conference/institution name
+   - `location` — city or full location (e.g., "Baltimore, MD, USA")
+   - `date` — ISO format (YYYY-MM-DD)
+   - `lat` — latitude (number)
+   - `lng` — longitude (number)
+   - `slides` — (optional) relative path to slides PDF (e.g., `talks/slides-2024.pdf`)
+
+2. Example:
+```json
+[
+  {
+    "title": "Deep Learning in Biology",
+    "venue": "Nature Methods Summit",
+    "location": "San Francisco, CA, USA",
+    "date": "2025-03-15",
+    "lat": 37.7749,
+    "lng": -122.4194,
+    "slides": "talks/deep-learning-2025.pdf"
+  }
+]
+```
+
+3. (Optional) Add slides PDFs to the `talks/` folder and reference them in `talks.json`'s `slides` field.
+4. Visit the Talks page — the map updates automatically.
+
+**Finding lat/lng coordinates:**
+Use Google Maps, OpenStreetMap, or any lat/lng lookup tool. For cities, search the venue name + coordinates.
 
 Markdown features supported
 - Headings `#` through `######`
