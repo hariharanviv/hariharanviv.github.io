@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Measuring HIV-1 Persistence",
+    "venue": "Johns Hopkins University",
+    "location": "Baltimore, MD, USA",
+    "date": "2024-10-12",
+    "lat": 39.3299,
+    "lng": -76.6205,
+    "slides": "talks/jhu-2024-slides.pdf"
+  },
+  {
+    "title": "High-throughput assays for immune response",
+    "venue": "EMBO Conference",
+    "location": "Barcelona, Spain",
+    "date": "2023-06-04",
+    "lat": 41.3851,
+    "lng": 2.1734,
+    "slides": ""
+  }
+]

@@ -38,6 +38,10 @@ Folder structure
 │   ├── index.md            # Blog hub
 │   ├── post-1.md           # Example post
 │   └── post-2.md           # Add more posts here
+├── /talks/
+│   ├── index.md            # Talks page (interactive map)
+│   ├── talks.json          # Talks metadata (title, venue, date, lat, lng, slides)
+│   └── talks.js            # Client-side renderer that shows a map and list
 ├── /cvs/
 │   ├── cv.md               # CV page
 │   └── cv.pdf              # CV PDF (optional)
@@ -192,6 +196,14 @@ Add a button to the navigation in `index.html`:
 ```html
 <button data-md="path/to/file.md" class="nav-link">Label</button>
 ```
+
+Talks (how it works)
+---------------------
+- Put talk metadata in `talks/talks.json`. Each entry should have: `title`, `venue`, `location`, `date`, `lat`, `lng`, and optional `slides` (relative path to slides PDF).
+- The `talks/index.md` page contains a `#talkmap` div that the client-side `talks/talks.js` will populate with an interactive Leaflet map and a list of talks below it.
+- `talks/talks.js` loads Leaflet from a CDN, fetches `talks/talks.json`, places markers, and binds popups with slides links where available.
+
+This approach mirrors the academicpages `talkmap.ipynb` idea by keeping talk metadata in a simple JSON file and rendering an interactive map client-side so you don't need a Jupyter server in production.
 
 Markdown features supported
 - Headings `#` through `######`

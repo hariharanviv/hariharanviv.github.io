@@ -67,6 +67,18 @@
       $('#content').innerHTML = html;
       $('#content').focus();
 
+      // If the page is a Talks page, load the talks renderer
+      if(path && path.startsWith('talks/')){
+        try{
+          // load talks.js if available
+          if(!window.initTalks){
+            const s = document.createElement('script');
+            s.src = 'talks/talks.js';
+            s.onload = ()=>{ if(window.initTalks) window.initTalks(); };
+            document.body.appendChild(s);
+          } else { window.initTalks(); }
+        } catch(e){ console.error('Error initializing talks:', e); }
+      }
       // Load Utterances for comments if viewing a blog post
       if(path.startsWith('blog/post-') && path.endsWith('.md')){
         loadUtterances();
