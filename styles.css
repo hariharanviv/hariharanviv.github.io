@@ -71,15 +71,15 @@ main.container{display:grid;grid-template-columns:310px 1fr;gap:2.4rem;padding-t
 .row{display:flex;flex-wrap:wrap;margin-right:-15px;margin-left:-15px}
 .col-md-12{flex:0 0 100%;padding-right:15px;padding-left:15px;max-width:100%}
 .sidebar{position:sticky;top:1rem;height:fit-content}
-.profile-card{background:linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.46));padding:1.15rem;border-radius:14px}
+.profile-card{background:var(--card);padding:1.15rem;border-radius:14px}
 .avatar-wrap{display:flex;align-items:center;gap:0.6rem;margin-bottom:0.5rem}
 .avatar-img{width:58px;height:58px;border-radius:10px;object-fit:cover;display:block}
 .avatar-initials{width:58px;height:58px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#7aa6cf);display:flex;align-items:center;justify-content:center;font-weight:700;color:#ffffff}
 
 
-.profile-card{background:linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.46));padding:1.15rem;border-radius:14px;box-shadow:var(--card-shadow);border:1px solid var(--card-border)}
+.profile-card{background:var(--card);padding:1.15rem;border-radius:14px;box-shadow:var(--card-shadow);border:1px solid var(--card-border)}
 
-.content{background:linear-gradient(180deg, rgba(255,255,255,0.78), rgba(255,255,255,0.5));padding:2rem;border-radius:16px;min-height:60vh;box-shadow:var(--card-shadow);border:1px solid var(--card-border)}
+.content{background:var(--card);padding:2rem;border-radius:16px;min-height:60vh;box-shadow:var(--card-shadow);border:1px solid var(--card-border)}
 .tidbit{margin-top:0.8rem;padding-top:0.65rem;border-top:1px solid rgba(65,80,97,0.12)}
 .tidbit-title{display:block;color:var(--accent);font-weight:600;margin-bottom:0.25rem}
 .tidbit-text{color:var(--muted);margin:0}
@@ -90,7 +90,7 @@ main.container{display:grid;grid-template-columns:310px 1fr;gap:2.4rem;padding-t
 .content p{color:var(--muted);line-height:1.72;max-width:68ch}
 .content a{color:var(--accent)}
 .content pre{background:var(--card);padding:0.9rem;border-radius:8px;overflow:auto;border:1px solid var(--glass-2)}
-.content code{background:rgba(255,255,255,0.03);padding:0.1rem 0.35rem;border-radius:4px}
+.content code{background:var(--glass);padding:0.1rem 0.35rem;border-radius:4px}
 ul{padding-left:1.1rem}
 
 .row{display:flex;flex-wrap:wrap;margin-right:-15px;margin-left:-15px;width:100%}
