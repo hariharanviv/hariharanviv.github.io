@@ -56,6 +56,12 @@ Content files (root level)
 - [publications.md](publications.md) — publications page
 - [tidbit.md](tidbit.md) — sidebar tidbit text
 
+Blog architecture
+- The blog lives only in the `/blog/` folder now.
+- [blog/index.md](blog/index.md) is the blog hub.
+- [blog/post-*.md](blog/post-1.md) files are the individual posts.
+- Root-level `blog.md` and `blogpost1.md` are no longer used.
+
 Blog folder (`/blog/`)
 - [blog/index.md](blog/index.md) — blog hub (aggregates all posts)
 - [blog/post-1.md](blog/post-1.md) — example blog post

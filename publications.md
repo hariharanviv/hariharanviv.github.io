@@ -1,6 +1,6 @@
 # Publications
 
-**[View my Google Scholar profile](https://scholar.google.com/citations?user=YOUR-SCHOLAR-ID)**
+**[View my Google Scholar profile](https://scholar.google.com/citations?user=8-v4nJgAAAAJ&hl=en)**
 
 Place your PDF files in the `papers/` folder and keep the filenames in the links below.
 
