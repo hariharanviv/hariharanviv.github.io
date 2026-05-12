@@ -1,6 +1,6 @@
 # Curriculum Vitae
 
-**Download:** [CV (PDF)](cv.pdf)
+**Download:** [CV (PDF)](/cvs/2026-03-16_Vivek_AcademicCV.pdf)
 
 Page in construction.
 
