@@ -2,7 +2,6 @@
 
 **[View my Google Scholar profile](https://scholar.google.com/citations?user=8-v4nJgAAAAJ&hl=en)**
 
-Place your PDF files in the `papers/` folder and keep the filenames in the links below.
 
 ### Superinfection promotes replication and diversification of defective HIV-1 proviruses in people with non-suppressible viraemia
 

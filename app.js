@@ -6,6 +6,45 @@
   let allBlogPosts = [];
   let postTagMap = {}; // Map of post file path -> tags array
 
+  const BLOG_POST_ROUTE_RE = /^blog\/post-[^/]+\/?$/i;
+
+  function normalizeMarkdownRoute(path){
+    const cleaned = String(path || '')
+      .replace(/^#/, '')
+      .split('?')[0]
+      .split('#')[0]
+      .replace(/^\.\//, '');
+
+    if(/^blog\/post-[^/]+\/index\.md$/i.test(cleaned)){
+      return cleaned.replace(/\/index\.md$/i, '/');
+    }
+
+    if(/^blog\/post-[^/]+\.md$/i.test(cleaned)){
+      return cleaned.replace(/\.md$/i, '/');
+    }
+
+    if(/^blog\/post-[^/]+$/i.test(cleaned)){
+      return `${cleaned}/`;
+    }
+
+    return cleaned;
+  }
+
+  function routeToFetchPath(route){
+    if(/\.md$/i.test(route)) return route;
+    if(route.endsWith('/')) return `${route}index.md`;
+    return `${route}/index.md`;
+  }
+
+  function isBlogPostRoute(path){
+    return BLOG_POST_ROUTE_RE.test(normalizeMarkdownRoute(path));
+  }
+
+  function resolveRelativeUrl(href, baseDir=''){
+    if(/^(?:[a-z]+:|#|\/|mailto:|data:)/i.test(href)) return href;
+    return new URL(href, `${window.location.origin}/${baseDir}`).pathname.replace(/^\//, '');
+  }
+
   function $(sel,root=document){return root.querySelector(sel)}
   function $all(sel,root=document){return Array.from(root.querySelectorAll(sel))}
 
@@ -15,6 +54,10 @@
   }
 
   async function loadMarkdown(path, pushHistory=true){
+    let route = normalizeMarkdownRoute(path || 'about.md');
+    let fetchPath = routeToFetchPath(route);
+    let baseDir = fetchPath.includes('/') ? fetchPath.slice(0, fetchPath.lastIndexOf('/') + 1) : '';
+
     try{
       // Provide helpful guidance when the page is opened via file://
       if(location.protocol === 'file:'){
@@ -22,14 +65,14 @@
         return;
       }
 
-      const res = await fetch(path);
+      const res = await fetch(fetchPath);
       if(!res.ok) throw new Error(`${res.status} ${res.statusText}`);
       const md = await res.text();
-      let html = renderMarkdown(md);
+      let html = renderMarkdown(md, fetchPath);
       
       // If viewing a blog post, add social share, related posts, and comments
-      if(path.startsWith('blog/post-') && path.endsWith('.md')){
-        const postUrl = window.location.href.split('#')[0] + '#' + path;
+      if(isBlogPostRoute(route)){
+        const postUrl = window.location.href.split('#')[0] + '#' + route;
         const postTitle = md.split('\n')[0].replace(/^#+\s*/, '');
         html += addSocialShare(postTitle, postUrl);
         
@@ -39,8 +82,8 @@
           const blogIndexRes = await fetch('blog/index.md');
           if(blogIndexRes.ok){
             const blogIndexMd = await blogIndexRes.text();
-            renderMarkdown(blogIndexMd); // This populates allBlogPosts and postTagMap
-            currentTags = postTagMap[path] || [];
+            renderMarkdown(blogIndexMd, 'blog/index.md'); // This populates allBlogPosts and postTagMap
+            currentTags = postTagMap[route] || [];
           }
         } catch(e) {
           console.error('Error loading blog index:', e);
@@ -52,7 +95,7 @@
         if(related.length){
           html += '<ul>';
           related.forEach(p=>{
-            if(p.link && p.link !== path){
+            if(p.link && p.link !== route){
               html += `<li><a href="${p.link}">${escapeHtml(p.title)}</a></li>`;
             }
           });
@@ -68,7 +111,7 @@
       $('#content').focus();
 
       // If the page is a Talks page, inject talkmap container and load talks renderer
-      if(path && path.startsWith('talks/')){
+      if(route && route.startsWith('talks/')){
         try{
           // Inject the talkmap div at the top of content
           const mapDiv = document.createElement('div');
@@ -86,16 +129,16 @@
         } catch(e){ console.error('Error initializing talks:', e); }
       }
       // Load Utterances for comments if viewing a blog post
-      if(path.startsWith('blog/post-') && path.endsWith('.md')){
+      if(isBlogPostRoute(route)){
         loadUtterances();
       }
 
       // update browser history (use hash to avoid server reloads)
       if(pushHistory){
-        try{ history.pushState({md: path}, '', '#'+path); }catch(e){ /* ignore */ }
+        try{ history.pushState({md: route}, '', '#'+route); }catch(e){ /* ignore */ }
       }
     } catch(e){
-      showLoaderMessage(`<h2>Unable to load ${path}</h2><p>${escapeHtml(e.message)}</p><p>If you're running from the file system, start a static server (see README).</p>`);
+      showLoaderMessage(`<h2>Unable to load ${fetchPath || path}</h2><p>${escapeHtml(e.message)}</p><p>If you're running from the file system, start a static server (see README).</p>`);
       console.error('loadMarkdown error:', e);
     }
   }
@@ -104,15 +147,18 @@
     return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
-  function inlineMarkdown(str){
+  function inlineMarkdown(str, baseDir=''){
     // images
-    str = str.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img alt="$1" src="$2" />');
+    str = str.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (m, alt, href) => {
+      return `<img alt="${alt}" src="${resolveRelativeUrl(href, baseDir)}" />`;
+    });
     // links
     str = str.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (m, text, href) => {
+      const resolvedHref = resolveRelativeUrl(href, baseDir);
       if(/\.pdf($|\?)/i.test(href)){
-        return `<a href="${href}" download>${text}</a>`;
+        return `<a href="${resolvedHref}" download>${text}</a>`;
       }
-      return `<a href="${href}">${text}</a>`;
+      return `<a href="${resolvedHref}">${text}</a>`;
     });
     // bold
     str = str.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
@@ -123,9 +169,10 @@
     return str;
   }
 
-  function renderMarkdown(md){
+  function renderMarkdown(md, sourcePath=''){
     const lines = md.replace(/\r\n/g,'\n').split('\n');
     let out = '';
+    const baseDir = sourcePath.includes('/') ? sourcePath.slice(0, sourcePath.lastIndexOf('/') + 1) : '';
 
     // Detect blog listing format by checking if ANY line has ### Category | Date format
     let isBlogListing = false;
@@ -154,7 +201,7 @@
         
         // Render regular paragraphs before first h3
         if(!foundFirstH3 && !/^#{1,6}\s|^---$|^\s*$/.test(raw)){
-          out += '<p>'+inlineMarkdown(escapeHtml(raw))+'</p>';
+          out += '<p>'+inlineMarkdown(escapeHtml(raw), baseDir)+'</p>';
           continue;
         }
         
@@ -193,7 +240,7 @@
             const linkMatch = titleLine.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
             if(linkMatch){
               currentCard.title = linkMatch[1].trim();
-              currentCard.link = linkMatch[2].trim();
+              currentCard.link = normalizeMarkdownRoute(linkMatch[2].trim());
             } else {
               currentCard.title = titleLine;
               currentCard.link = null;
@@ -213,7 +260,7 @@
       // Build tag map for quick lookup when viewing individual posts
       blogCards.forEach(card => {
         if(card.link){
-          postTagMap[card.link] = card.tags;
+          postTagMap[normalizeMarkdownRoute(card.link)] = card.tags;
         }
       });
       
@@ -232,7 +279,7 @@
               <a href="${href}">
                 ${escapeHtml(card.title)}
                 <p class="pt-20 pb-10">
-                  ${inlineMarkdown(escapeHtml((card.excerpt||'').substring(0, 350)))}
+                  ${inlineMarkdown(escapeHtml((card.excerpt||'').substring(0, 350)), baseDir)}
                   <i>(continue reading)</i>
                 </p>
               </a>
@@ -249,7 +296,7 @@
     // REGULAR MARKDOWN MODE
     let inCode=false, codeBuf=[], inList=false, listBuf=[];
     function flushCode(){ if(codeBuf.length){ out += '<pre><code>'+escapeHtml(codeBuf.join('\n'))+'</code></pre>'; codeBuf=[]; inCode=false } }
-    function flushList(){ if(listBuf.length){ out += '<ul>' + listBuf.map(li=>'<li>'+inlineMarkdown(escapeHtml(li.replace(/^-\s+/,'')))+'</li>').join('') + '</ul>'; listBuf=[]; inList=false } }
+    function flushList(){ if(listBuf.length){ out += '<ul>' + listBuf.map(li=>'<li>'+inlineMarkdown(escapeHtml(li.replace(/^-\s+/,'')), baseDir)+'</li>').join('') + '</ul>'; listBuf=[]; inList=false } }
     
     for(let i=0; i<lines.length; i++){
       let raw = lines[i];
@@ -273,14 +320,14 @@
       }
 
       if(/^>\s?/.test(raw)){
-        flushList(); out += '<blockquote>'+inlineMarkdown(escapeHtml(raw.replace(/^>\s?/,'')))+'</blockquote>'; continue;
+        flushList(); out += '<blockquote>'+inlineMarkdown(escapeHtml(raw.replace(/^>\s?/,'')), baseDir)+'</blockquote>'; continue;
       }
 
       if(/^\s*$/.test(raw)){
         continue;
       }
 
-      out += '<p>'+inlineMarkdown(escapeHtml(raw))+'</p>';
+      out += '<p>'+inlineMarkdown(escapeHtml(raw), baseDir)+'</p>';
     }
     
     flushCode(); flushList();

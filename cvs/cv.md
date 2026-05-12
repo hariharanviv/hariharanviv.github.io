@@ -2,9 +2,11 @@
 
 **Download:** [CV (PDF)](cv.pdf)
 
+Page in construction.
+
 Brief summary
 
 - Current position: Ph.D. student, Johns Hopkins University
 - Research interests: HIV-1 persistence, immune response, high-throughput assays
 
-To publish a PDF CV, drop a `cv.pdf` file in the cvs folder. Edit this file to add a short web summary.
+

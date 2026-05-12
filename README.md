@@ -36,8 +36,12 @@ Folder structure
 │   └── icon-github.svg     # GitHub icon
 ├── /blog/
 │   ├── index.md            # Blog hub
-│   ├── post-1.md           # Example post
-│   └── post-2.md           # Add more posts here
+│   ├── post-1/
+│   │   └── index.md        # Example post
+│   └── post-2/
+│       └── index.md        # Add more posts here
+│   └── post-template/
+│       └── index.md        # Starter template for new posts
 ├── /talks/
 │   ├── index.md            # Talks page (interactive map)
 │   ├── talks.json          # Talks metadata (title, venue, date, lat, lng, slides)
@@ -52,7 +56,7 @@ Folder structure
 
 Core files
 - [index.html](index.html) — main site shell and navigation
-- [styles.css](styles.css) — visual styles (Roboto font, light/dark mode variables)
+- [styles.css](styles.css) — visual styles (Satoshi font, light/dark mode variables)
 - [app.js](app.js) — client-side Markdown loader and renderer
 
 Content files (root level)
@@ -63,13 +67,14 @@ Content files (root level)
 Blog architecture
 - The blog lives only in the `/blog/` folder now.
 - [blog/index.md](blog/index.md) is the blog hub.
-- [blog/post-*.md](blog/post-1.md) files are the individual posts.
+- Each blog post lives in its own folder, for example [blog/post-1/](blog/post-1/) with the post content in `index.md`.
+- Put any post-specific assets, code, or extra markdown files in the same folder as that post's `index.md`.
 - Root-level `blog.md` and `blogpost1.md` are no longer used.
 
 Blog folder (`/blog/`)
 - [blog/index.md](blog/index.md) — blog hub (aggregates all posts)
-- [blog/post-1.md](blog/post-1.md) — example blog post
-- Add more: `blog/post-2.md`, `blog/post-3.md`, etc.
+- [blog/post-1/](blog/post-1/) — example blog post folder
+- Add more as folders: `blog/post-2/`, `blog/post-3/`, etc.
 
 CV folder (`/cvs/`)
 - [cvs/cv.md](cvs/cv.md) — web-friendly CV summary
@@ -110,8 +115,12 @@ PDF: [Download paper](papers/your-paper-file.pdf)
 Any Markdown link ending in `.pdf` is rendered as a downloadable link by the site.
 
 **Blog posts:**
-1. Create a new `.md` file in the `/blog/` folder (e.g., `blog/post-2.md`) with your post content.
-2. Add an entry to [blog/index.md](blog/index.md) using this format:
+1. Create a new folder in `/blog/` for each post (e.g., `blog/post-2/`).
+2. Put the post content in `index.md` inside that folder (e.g., `blog/post-2/index.md`).
+3. Add any images, code files, or supporting assets for that post in the same folder.
+4. Add an entry to [blog/index.md](blog/index.md) using this format:
+
+Tip: you can copy `blog/post-template/index.md` to start a new post folder quickly.
 
 ```
 ### Category | Month Day, Year
@@ -132,19 +141,19 @@ A short intro to the post. This excerpt will appear in the blog hub...
 
 The blog hub automatically extracts the title and first ~300 characters as an excerpt.
 
-Advanced: link titles directly to post files
+Advanced: link titles directly to post folders
 
-If you prefer the blog hub entry's title to be a direct link to the full post file (so clicking the title opens the post in-place), write the title line as a Markdown link to the post file, e.g.:
+If you prefer the blog hub entry's title to be a direct link to the full post folder (so clicking the title opens the post in-place), write the title line as a Markdown link to the folder, e.g.:
 
 ```
 ### Commentary | May 9, 2026
-[Five Ways Data Can Transform Your Perspective](blog/post-5.md)
+[Five Ways Data Can Transform Your Perspective](blog/post-5/)
 The short intro paragraph...
 
 ---
 ```
 
-The site will detect `[...] (path/to/post.md)` and make the card's title open that file inside the main content area.
+The site will detect `[...] (path/to/post/)` or `[...] (path/to/post/index.md)` and make the card's title open that post inside the main content area.
 
 **Add sidebar content:**
 - Edit [tidbit.md](tidbit.md) for the short personal tidbit under your name
