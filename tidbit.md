@@ -1,3 +1,3 @@
 ### Quick Tidbit
 
-Enthusiastic about data-driven perspectives on science. Short, web-friendly one-liner works best here — e.g. "I enjoy finding simple quantitative answers to messy biological questions."
+Biomedical engineer turned virologist turned immunologist turned molecular biologist...turned blogger? I write about data-driven science and different ways to view life.
