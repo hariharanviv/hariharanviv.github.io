@@ -291,7 +291,16 @@ body:not(.dark-mode) .blog-tag{
   text-decoration:none;
   box-shadow:0 4px 10px rgba(31,78,121,0.08);
 }
-.blog-tag{transition:all 0.12s ease}
+/* Base tag sizing shared by light and dark modes to keep size consistent */
+.blog-tag{
+  transition:all 0.12s ease;
+  display:inline-block;
+  padding:0.32rem 0.7rem;
+  border-radius:6px;
+  font-size:0.92rem;
+  font-weight:600;
+  text-decoration:none;
+}
 .blog-tag:hover{opacity:0.92;transform:translateY(-1px)}
 /* Dark mode: make tags slightly filled for legibility */
 body.dark-mode .blog-tag{
