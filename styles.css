@@ -14,15 +14,15 @@
   --max-width:1400px;
 }
 body.dark-mode{
-  --bg:#0d1320;
-  --card:#111827;
-  --muted:#a6b0bf;
-  --accent:#9ab7df;
-  --text:#e8eef6;
-  --glass: rgba(255,255,255,0.04);
+  --bg:#051225; /* darker background for depth */
+  --card:#0b1624; /* slightly lighter than background for separation */
+  --muted:#c3cfdf; /* increase muted text contrast */
+  --accent:#61a1ff; /* brighter accent for links and tags */
+  --text:#f6fbff; /* near-white for main text */
+  --glass: rgba(255,255,255,0.035);
   --glass-2: rgba(255,255,255,0.06);
-  --card-border: rgba(255,255,255,0.1);
-  --card-shadow: 0px 16px 40px 0px rgba(0,0,0,0.38);
+  --card-border: rgba(255,255,255,0.06);
+  --card-shadow: 0px 18px 44px 0px rgba(0,0,0,0.45);
 }
 *{box-sizing:border-box}
 html,body{height:100%;}
@@ -293,8 +293,13 @@ body:not(.dark-mode) .blog-tag{
 }
 .blog-tag{transition:all 0.12s ease}
 .blog-tag:hover{opacity:0.92;transform:translateY(-1px)}
-body.dark-mode .blog-tag{background:transparent;border:1.5px solid var(--accent);color:var(--accent)}
-body.dark-mode .blog-tag:hover{background:rgba(138,180,255,0.06)}
+/* Dark mode: make tags slightly filled for legibility */
+body.dark-mode .blog-tag{
+  background: rgba(97,161,255,0.10);
+  border: 1px solid rgba(97,161,255,0.18);
+  color: var(--accent);
+}
+body.dark-mode .blog-tag:hover{background: rgba(97,161,255,0.16);transform:translateY(-1px);}
 
 /* Related posts */
 .related-posts{margin:2rem 0;padding:1.5rem;background:var(--card);border-left:4px solid var(--accent);border-radius:6px}
