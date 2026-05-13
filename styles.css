@@ -1,4 +1,4 @@
-@import url('https://api.fontshare.com/v2/css?f[]=satoshi@500,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root{
   --bg:#f6f3ee;
@@ -28,7 +28,7 @@ body.dark-mode{
 html,body{height:100%;}
 body{
   margin:0;
-  font-family: Satoshi, system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial;
   background:
     radial-gradient(circle at 8% 12%, var(--bg-accent), transparent 28%),
     linear-gradient(120deg, rgba(31,78,121,0.03), rgba(122,166,207,0.01)),
@@ -43,7 +43,7 @@ body{
 }
 .container{max-width:var(--max-width);margin:0 auto;padding:1rem}
 .header-inner{display:flex;align-items:center;justify-content:space-between;gap:1rem}
-.site-title{font-size:2.15rem;margin:0;font-weight:600;color:var(--accent);letter-spacing:0.025em;font-family:Satoshi, system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial;text-transform:none}
+.site-title{font-size:2.15rem;margin:0;font-weight:600;color:var(--accent);letter-spacing:0.025em;font-family:'Inter', system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial;text-transform:none}
 .main-nav{display:flex;gap:0.5rem;align-items:center}
 .main-nav .nav-link{background:transparent;border:0;color:var(--muted);padding:0.6rem 0.95rem;border-radius:999px;cursor:pointer;font-size:1.12rem;font-weight:600;letter-spacing:0.01em}
 .main-nav .nav-link:hover{color:var(--accent);background:var(--glass-2)}
@@ -90,7 +90,7 @@ main.container{display:grid;grid-template-columns:340px 1fr;gap:2rem;padding-top
 .tidbit{margin-top:0.8rem;padding-top:0.65rem;border-top:1px solid rgba(65,80,97,0.12)}
 .tidbit-title{display:block;color:var(--accent);font-weight:600;margin-bottom:0.25rem}
 .tidbit-text{color:var(--muted);margin:0}
-.content h1,.content h2,.content h3{color:var(--text);font-family:Satoshi, system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial;margin-top:2.5rem;margin-bottom:1rem;line-height:1.15;font-weight:600;letter-spacing:0.01em}
+.content h1,.content h2,.content h3{color:var(--text);font-family:'Inter', system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial;margin-top:2.5rem;margin-bottom:1rem;line-height:1.15;font-weight:600;letter-spacing:0.01em}
 .content h1{font-size:1.75rem;margin-top:2.8rem;margin-bottom:1.2rem;padding-bottom:0.75rem;border-bottom:2px solid var(--accent)}
 .content h2{font-size:1.41rem;margin-top:2.5rem;margin-bottom:1rem;padding-bottom:0.6rem;border-bottom:1px solid var(--glass-2)}
 .content h3{font-size:1.2rem;margin-top:2rem;margin-bottom:0.8rem}
@@ -155,7 +155,7 @@ ul{padding-left:1.1rem}
   background-position:0 100%;
   background-repeat:no-repeat;
   background-size:0% 2px;
-  font-family:Roboto, system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial;
+  font-family:'Inter', system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial;
   cursor:pointer;
   transition:background-size 0.3s;
   text-decoration:none;
