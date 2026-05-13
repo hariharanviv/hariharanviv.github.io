@@ -35,7 +35,7 @@ PDF: [Download paper](papers/placeholder-publication-3.pdf)
 
 ## Placeholder Publication Title 4
 
-### Author E., Author F., and Hariharan V. (2026).
+### Author E., Author F., and Author G. (2026).
 
 Blurb: Add one concise paragraph describing the hypothesis, major result, and how this work extends previous findings.
 

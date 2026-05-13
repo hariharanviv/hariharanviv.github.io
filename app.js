@@ -138,6 +138,22 @@
         try{ history.pushState({md: route}, '', '#'+route); }catch(e){ /* ignore */ }
       }
     } catch(e){
+      if(isBlogPostRoute(route) && route !== 'blog/post-template/'){
+        try{
+          const templateRes = await fetch('blog/post-template/index.md');
+          if(templateRes.ok){
+            const templateMd = await templateRes.text();
+            const templateHtml = renderMarkdown(templateMd, 'blog/post-template/index.md');
+            showLoaderMessage(`<div class="blog-template-fallback"><h2>Draft template</h2><p>This post is not available yet, so the template is shown for now.</p>${templateHtml}</div>`);
+            if(pushHistory){
+              try{ history.pushState({md: route}, '', '#'+route); }catch(err){ /* ignore */ }
+            }
+            return;
+          }
+        } catch(templateErr){
+          console.error('Template fallback error:', templateErr);
+        }
+      }
       showLoaderMessage(`<h2>Unable to load ${fetchPath || path}</h2><p>${escapeHtml(e.message)}</p><p>If you're running from the file system, start a static server (see README).</p>`);
       console.error('loadMarkdown error:', e);
     }
@@ -431,10 +447,11 @@
         const a = ev.target.closest && ev.target.closest('a');
         if(!a) return;
         const href = a.getAttribute('href') || '';
-        // handle local markdown links (relative paths ending with .md)
-        if(href.endsWith('.md')){
+        const normalizedHref = normalizeMarkdownRoute(href);
+        // handle local markdown links and blog folder routes inside the app
+        if(href.endsWith('.md') || isBlogPostRoute(normalizedHref)){
           ev.preventDefault();
-          loadMarkdown(href);
+          loadMarkdown(normalizedHref);
         }
       });
     }

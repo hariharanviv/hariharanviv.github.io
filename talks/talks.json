@@ -9,12 +9,21 @@
     "slides": "talks/jhu-2024-slides.pdf"
   },
   {
-    "title": "High-throughput assays for immune response",
-    "venue": "EMBO Conference",
-    "location": "Barcelona, Spain",
+    "title": "Failure to Achieve Undetectable HIV-1 Viral Load",
+    "venue": "AIDS 2024",
+    "location": "Munich, Germany",
     "date": "2023-06-04",
-    "lat": 41.3851,
-    "lng": 2.1734,
-    "slides": ""
+    "lat": 48.1351,
+    "lng": 11.5820,
+    "slides": "talks/Final_1041_1015839_hariharanviv_5.pptx"
+  },
+  {
+    "title": "Failure to Achieve Undetectable HIV-1 Viral Load",
+    "venue": "NCI Think Tank",
+    "location": "Frederick, MD, USA",
+    "date": "2023-06-04",
+    "lat": 39.4561,
+    "lng": -77.4123,
+    "slides": "talks/Final_1041_1015839_hariharanviv_5.pptx"
   }
 ]
